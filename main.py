@@ -10,7 +10,8 @@ from config import CONFIG
 
 
 def get_content(index: int):
-    content_path = os.path.join('content', f'{index}.txt')
+    current_dir = os.getcwd()
+    content_path = os.path.join(current_dir, 'content', f'{index}.txt')
     f = open(content_path, 'r', encoding='utf-8')
     return f.read()
 
