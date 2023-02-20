@@ -1,2 +1,5 @@
 config.py
 note.txt
+__pycache__
+.idea
+venv
