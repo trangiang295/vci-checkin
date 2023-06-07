@@ -26,9 +26,9 @@ def alert_logwork(index: int):
 
 if __name__ == '__main__':
     today = datetime.today()
-    last_day_of_month = calendar.monthrange(today.year, today.month)
+    last_day_of_month = calendar.monthrange(today.year, today.month)[1]
     if today.day == last_day_of_month:
         content_index = 'last'
     else:
-        content_index = random.randint(1, 2)
+        content_index = random.randint(1, 3)
     alert_logwork(content_index)
