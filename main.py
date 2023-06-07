@@ -7,6 +7,8 @@ import telegram
 import asyncio
 
 from config import CONFIG
+from constant import SPLIT_TXT
+from utilities.weather import WeatherAPI
 
 
 def get_content(index: int):
@@ -16,8 +18,23 @@ def get_content(index: int):
     return f.read()
 
 
+def query_wheather_info():
+    try:
+        weather_api = WeatherAPI(CONFIG['weatherapi_token'])
+        utc_hour = datetime.utcnow().hour
+        if utc_hour < 5:
+            data = weather_api.forecast_afternoon_today()
+        else:
+            data = weather_api.forecast_morning_tomorrow()
+        return f'{data}'
+    except:
+        return ''
+
+
 def alert_diemdanh(index: int):
     content = get_content(index)
+    weather_content = query_wheather_info()
+    content += SPLIT_TXT + weather_content
     params = {'chat_id': CONFIG.get('group_id'), 'text': content}
     bot_token = CONFIG.get('bot_token')
     req = requests.post(f'https://api.telegram.org/bot{bot_token}/sendMessage', data=params)
