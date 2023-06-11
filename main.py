@@ -49,8 +49,8 @@ def query_weather_info():
             content += '`Hôm nay:`\n'
             elements = [
                 f"🌡️: {data['today']['temp']}°C",
-                f"💦: {data['today']['temp']}%",
-                f"UV: {data['today']['temp']}"
+                f"💦: {data['today']['humidity']}%",
+                f"UV: {data['today']['uv']}"
             ]
             content += make_line_with_space(elements)
             description = data['today']['description']
@@ -60,8 +60,8 @@ def query_weather_info():
             content += '`17h chiều nay:`\n'
             elements = [
                 f"🌡️: {data['forecast_5pm']['temp']}°C",
-                f"💦: {data['forecast_5pm']['temp']}%",
-                f"UV: {data['forecast_5pm']['temp']}"
+                f"💦: {data['forecast_5pm']['humidity']}%",
+                f"UV: {data['forecast_5pm']['uv']}"
             ]
             content += make_line_with_space(elements)
             elements = [
@@ -76,8 +76,8 @@ def query_weather_info():
             content += '`Hôm nay:`\n'
             elements = [
                 f"🌡️: {data['today']['temp']}°C",
-                f"💦: {data['today']['temp']}%",
-                f"UV: {data['today']['temp']}"
+                f"💦: {data['today']['humidity']}%",
+                f"UV: {data['today']['uv']}"
             ]
             content += make_line_with_space(elements)
             description = data['today']['description']
@@ -87,8 +87,8 @@ def query_weather_info():
             content += '`7h sáng mai:`\n'
             elements = [
                 f"🌡️: {data['forecast_7am']['temp']}°C",
-                f"💦: {data['forecast_7am']['temp']}%",
-                f"UV: {data['forecast_7am']['temp']}"
+                f"💦: {data['forecast_7am']['humidity']}%",
+                f"UV: {data['forecast_7am']['uv']}"
             ]
             content += make_line_with_space(elements)
             elements = [
@@ -102,8 +102,8 @@ def query_weather_info():
             content += '`Cả ngày mai:`\n'
             elements = [
                 f"🌡️: {data['forecast_day']['temp']}°C",
-                f"💦: {data['forecast_day']['temp']}%",
-                f"UV: {data['forecast_day']['temp']}"
+                f"💦: {data['forecast_day']['humidity']}%",
+                f"UV: {data['forecast_day']['uv']}"
             ]
             content += make_line_with_space(elements)
             description = data['forecast_day']['description']
