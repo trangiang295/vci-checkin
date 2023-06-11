@@ -1,13 +1,14 @@
 import requests
 import random
 import os
+import math
 from datetime import datetime
 
 import telegram
 import asyncio
 
 from config import CONFIG
-from constant import SPLIT_TXT
+from constant import SPLIT_TXT, TELE_LINE_NUM
 from utilities.weather import WeatherAPI
 
 
@@ -18,26 +19,108 @@ def get_content(index: int):
     return f.read()
 
 
-def query_wheather_info():
+def make_line_with_space(sentences: list):
+    sentences_len = [len(x) for x in sentences]
+    space_len = math.floor((TELE_LINE_NUM - sum(sentences_len)) / (len(sentences) - 1))
+    space = int(space_len * 2) * ' '
+    return space.join(sentences) + '\n'
+
+
+def rain_or_sun_emoji(description: str, is_morning: bool or None):
+    if "mưa" in description.lower():
+        if is_morning is None:
+            note = ''
+        else:
+            note = '  🔜  *Đi sớm*' if is_morning else '*Về sớm*'
+        return f'☔☔☔{note}'
+    elif "nắng" in description.lower():
+        return '🌞🌞🌞'
+    else:
+        return ''
+
+
+def query_weather_info():
+    content = ''
     try:
         weather_api = WeatherAPI(CONFIG['weatherapi_token'])
         utc_hour = datetime.utcnow().hour
         if utc_hour < 5:
             data = weather_api.forecast_afternoon_today()
+            content += 'Hôm nay:\n'
+            elements = [
+                f"🌡️: {data['today']['temp']}°C",
+                f"💦: {data['today']['temp']}%",
+                f"UV: {data['today']['temp']}"
+            ]
+            content += make_line_with_space(elements)
+            description = data['today']['description']
+            content += f"Khả năng mưa: {data['today']['chance_of_rain']}%\n" \
+                       f"*{description}*     {rain_or_sun_emoji(description, None)}\n{SPLIT_TXT}"
+            ##################################################
+            content += '17h chiều nay:\n'
+            elements = [
+                f"🌡️: {data['forecast_5pm']['temp']}°C",
+                f"💦: {data['forecast_5pm']['temp']}%",
+                f"UV: {data['forecast_5pm']['temp']}"
+            ]
+            content += make_line_with_space(elements)
+            elements = [
+                f"Khả năng mưa: {data['forecast_5pm']['chance_of_rain']}%",
+                f"Cảm giác như: {data['forecast_5pm']['feelslike']}°C",
+            ]
+            content += make_line_with_space(elements)
+            description = data['forecast_5pm']['description']
+            content += f"*{description}*     {rain_or_sun_emoji(description, False)}"
         else:
             data = weather_api.forecast_morning_tomorrow()
-        return f'{data}'
+            content += 'Hôm nay:\n'
+            elements = [
+                f"🌡️: {data['today']['temp']}°C",
+                f"💦: {data['today']['temp']}%",
+                f"UV: {data['today']['temp']}"
+            ]
+            content += make_line_with_space(elements)
+            description = data['today']['description']
+            content += f"Khả năng mưa: {data['today']['chance_of_rain']}%\n" \
+                       f"*{description}*     {rain_or_sun_emoji(description, None)}\n{SPLIT_TXT}"
+            ####################################################
+            content += '7h sáng mai:\n'
+            elements = [
+                f"🌡️: {data['forecast_7am']['temp']}°C",
+                f"💦: {data['forecast_7am']['temp']}%",
+                f"UV: {data['forecast_7am']['temp']}"
+            ]
+            content += make_line_with_space(elements)
+            elements = [
+                f"Khả năng mưa: {data['forecast_7am']['chance_of_rain']}%",
+                f"Cảm giác như: {data['forecast_7am']['feelslike']}°C",
+            ]
+            content += make_line_with_space(elements)
+            description = data['forecast_7am']['description']
+            content += f"*{description}*     {rain_or_sun_emoji(description, True)}\n{SPLIT_TXT}"
+            ######################################################
+            content += 'Cả ngày mai:\n'
+            elements = [
+                f"🌡️: {data['forecast_day']['temp']}°C",
+                f"💦: {data['forecast_day']['temp']}%",
+                f"UV: {data['forecast_day']['temp']}"
+            ]
+            content += make_line_with_space(elements)
+            description = data['forecast_day']['description']
+            content += f"Khả năng mưa: {data['forecast_day']['chance_of_rain']}%\n" \
+                       f"*{description}*     {rain_or_sun_emoji(description, None)}"
+        return content
     except:
         return ''
 
 
 def alert_diemdanh(index: int):
     content = get_content(index)
-    weather_content = query_wheather_info()
+    weather_content = query_weather_info()
     content += SPLIT_TXT + weather_content
-    params = {'chat_id': CONFIG.get('group_id'), 'text': content}
+    params = {'chat_id': CONFIG.get('group_id'), 'text': content, 'parse_mode': 'markdown'}
     bot_token = CONFIG.get('bot_token')
-    req = requests.post(f'https://api.telegram.org/bot{bot_token}/sendMessage', data=params)
+    requests.post(f'https://api.telegram.org/bot{bot_token}/sendMessage', data=params)
 
 
 async def test():
