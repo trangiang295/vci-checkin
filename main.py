@@ -46,7 +46,7 @@ def query_weather_info():
         utc_hour = datetime.utcnow().hour
         if utc_hour < 5:
             data = weather_api.forecast_afternoon_today()
-            content += 'Hôm nay:\n'
+            content += '`Hôm nay:`\n'
             elements = [
                 f"🌡️: {data['today']['temp']}°C",
                 f"💦: {data['today']['temp']}%",
@@ -57,7 +57,7 @@ def query_weather_info():
             content += f"Khả năng mưa: {data['today']['chance_of_rain']}%\n" \
                        f"*{description}*     {rain_or_sun_emoji(description, None)}\n{SPLIT_TXT}"
             ##################################################
-            content += '17h chiều nay:\n'
+            content += '`17h chiều nay:`\n'
             elements = [
                 f"🌡️: {data['forecast_5pm']['temp']}°C",
                 f"💦: {data['forecast_5pm']['temp']}%",
@@ -73,7 +73,7 @@ def query_weather_info():
             content += f"*{description}*     {rain_or_sun_emoji(description, False)}"
         else:
             data = weather_api.forecast_morning_tomorrow()
-            content += 'Hôm nay:\n'
+            content += '`Hôm nay:`\n'
             elements = [
                 f"🌡️: {data['today']['temp']}°C",
                 f"💦: {data['today']['temp']}%",
@@ -84,7 +84,7 @@ def query_weather_info():
             content += f"Khả năng mưa: {data['today']['chance_of_rain']}%\n" \
                        f"*{description}*     {rain_or_sun_emoji(description, None)}\n{SPLIT_TXT}"
             ####################################################
-            content += '7h sáng mai:\n'
+            content += '`7h sáng mai:`\n'
             elements = [
                 f"🌡️: {data['forecast_7am']['temp']}°C",
                 f"💦: {data['forecast_7am']['temp']}%",
@@ -99,7 +99,7 @@ def query_weather_info():
             description = data['forecast_7am']['description']
             content += f"*{description}*     {rain_or_sun_emoji(description, True)}\n{SPLIT_TXT}"
             ######################################################
-            content += 'Cả ngày mai:\n'
+            content += '`Cả ngày mai:`\n'
             elements = [
                 f"🌡️: {data['forecast_day']['temp']}°C",
                 f"💦: {data['forecast_day']['temp']}%",
