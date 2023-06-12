@@ -31,7 +31,7 @@ def rain_or_sun_emoji(description: str, is_morning: bool or None):
         if is_morning is None:
             note = ''
         else:
-            note = '  🔜  *Đi sớm*' if is_morning else '*Về sớm*'
+            note = '  🔜  *Đi sớm*' if is_morning else '  🔜  *Về sớm*'
         return f'☔☔☔{note}'
     elif "nắng" in description.lower():
         return '🌞🌞🌞'
