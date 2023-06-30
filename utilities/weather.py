@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 DATE_FORMAT = '%Y-%m-%d'
@@ -20,7 +20,7 @@ class WeatherAPI:
         today = datetime.today()
         for forecast in forecast_days:
             date = datetime.strptime(forecast['date'], DATE_FORMAT)
-            if today.year == date.year and today.month == date.month and today.day == date.day:
+            if today.date() == date.date():
                 data['today'] = {
                     'temp': forecast['day']['avgtemp_c'],
                     'humidity': forecast['day']['avghumidity'],
@@ -50,33 +50,30 @@ class WeatherAPI:
         for forecast in forecast_days:
             date = datetime.strptime(forecast['date'], DATE_FORMAT)
             today = datetime.today()
-            if today.year == date.year and today.month == date.month:
-                if today.day == date.day:
-                    data['today'] = {
-                        'temp': forecast['day']['avgtemp_c'],
-                        'humidity': forecast['day']['avghumidity'],
-                        'chance_of_rain': forecast['day']['daily_chance_of_rain'],
-                        'uv': forecast['day']['uv'],
-                        'description': forecast['day']['condition']['text']
-                    }
-                elif today.day + 1 == date.day:
-                    data['forecast_7am'] = {
-                        'temp': forecast['hour'][0]['temp_c'],
-                        'feelslike': forecast['hour'][0]['feelslike_c'],
-                        'humidity': forecast['hour'][0]['humidity'],
-                        'chance_of_rain': forecast['hour'][0]['chance_of_rain'],
-                        'uv': forecast['hour'][0]['uv'],
-                        'description': forecast['hour'][0]['condition']['text']
-                    }
-                    data['forecast_day'] = {
-                        'temp': forecast['day']['avgtemp_c'],
-                        'humidity': forecast['day']['avghumidity'],
-                        'chance_of_rain': forecast['day']['daily_chance_of_rain'],
-                        'uv': forecast['day']['uv'],
-                        'description': forecast['day']['condition']['text']
-                    }
-                else:
-                    continue
+            if today.date() == date.date():
+                data['today'] = {
+                    'temp': forecast['day']['avgtemp_c'],
+                    'humidity': forecast['day']['avghumidity'],
+                    'chance_of_rain': forecast['day']['daily_chance_of_rain'],
+                    'uv': forecast['day']['uv'],
+                    'description': forecast['day']['condition']['text']
+                }
+            elif today.date() + timedelta(days=1) == date.date():
+                data['forecast_7am'] = {
+                    'temp': forecast['hour'][0]['temp_c'],
+                    'feelslike': forecast['hour'][0]['feelslike_c'],
+                    'humidity': forecast['hour'][0]['humidity'],
+                    'chance_of_rain': forecast['hour'][0]['chance_of_rain'],
+                    'uv': forecast['hour'][0]['uv'],
+                    'description': forecast['hour'][0]['condition']['text']
+                }
+                data['forecast_day'] = {
+                    'temp': forecast['day']['avgtemp_c'],
+                    'humidity': forecast['day']['avghumidity'],
+                    'chance_of_rain': forecast['day']['daily_chance_of_rain'],
+                    'uv': forecast['day']['uv'],
+                    'description': forecast['day']['condition']['text']
+                }
             else:
                 continue
         return data
