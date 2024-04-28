@@ -10,6 +10,7 @@ import asyncio
 from config import CONFIG
 from constant import SPLIT_TXT, TELE_LINE_NUM
 from utilities.weather import WeatherAPI
+from utilities.holiday import is_holiday
 
 
 def get_content(index: int):
@@ -132,5 +133,8 @@ async def test():
 
 if __name__ == '__main__':
     content_index = random.randint(1, 1)
-    alert_diemdanh(content_index)
+    if is_holiday():
+        pass
+    else:
+        alert_diemdanh(content_index)
     # asyncio.run(test())
