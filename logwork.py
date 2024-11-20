@@ -8,6 +8,7 @@ import telegram
 import asyncio
 
 from config import CONFIG
+from utilities.holiday import is_holiday
 
 
 def get_content(index: int):
@@ -31,4 +32,7 @@ if __name__ == '__main__':
         content_index = 'last'
     else:
         content_index = random.randint(1, 3)
-    alert_logwork(content_index)
+    if is_holiday():
+        pass
+    else:
+        alert_logwork(content_index)
