@@ -8,6 +8,7 @@ import telegram
 import asyncio
 
 from config import CONFIG
+from utilities.holiday import is_holiday
 
 
 def get_content(index: int):
@@ -26,4 +27,7 @@ def alert_lunch(index: int):
 
 if __name__ == '__main__':
     content_index = random.randint(1, 1)
-    alert_lunch(content_index)
+    if is_holiday():
+        pass
+    else:
+        alert_lunch(content_index)
