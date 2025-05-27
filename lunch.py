@@ -22,7 +22,8 @@ def alert_lunch(index: int):
     content = get_content(index)
     params = {'chat_id': CONFIG.get('fresher_group_id'), 'text': content, 'parse_mode': 'markdown'}
     bot_token = CONFIG.get('bot_token')
-    req = requests.post(f'https://api.telegram.org/bot{bot_token}/sendMessage', data=params)
+    api_url = CONFIG.get("api_url", "api.telegram.org")
+    req = requests.post(f'https://{api_url}/bot{bot_token}/sendMessage', data=params)
 
 
 if __name__ == '__main__':

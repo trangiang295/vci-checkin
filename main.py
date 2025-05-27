@@ -123,7 +123,9 @@ def alert_diemdanh(index: int):
     content += '\n' + SPLIT_TXT + weather_content
     params = {'chat_id': CONFIG.get('group_id'), 'text': content, 'parse_mode': 'markdown'}
     bot_token = CONFIG.get('bot_token')
-    requests.post(f'https://api.telegram.org/bot{bot_token}/sendMessage', data=params)
+    api_url = CONFIG.get("api_url", "api.telegram.org")
+    a = requests.post(f'https://{api_url}/bot{bot_token}/sendMessage', data=params)
+    print('a')
 
 
 async def test():
