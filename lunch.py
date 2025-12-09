@@ -27,8 +27,10 @@ def alert_lunch(index: int):
 
 
 if __name__ == '__main__':
-    content_index = random.randint(1, 1)
     if is_holiday():
         pass
     else:
-        alert_lunch(content_index)
+        if datetime.utcnow().hour == 3:
+            alert_lunch(2)
+        if datetime.utcnow().hour == 8:
+            alert_lunch(1)
