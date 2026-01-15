@@ -30,7 +30,7 @@ if __name__ == '__main__':
     if is_holiday():
         pass
     else:
-        if datetime.utcnow().hour == 2:
+        if datetime.utcnow().hour == 3:
             alert_lunch(2)
         if datetime.utcnow().hour == 8:
             alert_lunch(1)
